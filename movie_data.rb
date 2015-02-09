@@ -3,10 +3,8 @@
 # This is my MovieData class.  It uses hashes to make the running time much quicker as  there is a lot of searching for data in this class.
 # It will load the u.data and read all line, putting all of the valuable information into hashes.  
 
-
 class MovieData
 	require './movie_test'
-	# I know this is not necessary but it felt right as I have to initialize 4 instance hashes
 	# test contains user ratings to movies for a user not listed in the base data
 	# I decided to only have this constructor accept one value and that being the name of the data set.  So :u1 or :u
 	def initialize(data_set)
@@ -42,7 +40,7 @@ class MovieData
 		end
 	end
 
-	#loads the user_info hash.  That hash is a user pointed to an array of movies they have seen and what they have rated them
+	# Loads the user_info hash.  That hash is a user pointed to an array of movies they have seen and what they have rated them
 	def load_user_info
 		if @user_info.has_key?(@@line_array[0].to_i)
 			@user_info[@@line_array[0].to_i][@@line_array[1].to_i] = @@line_array[2].to_i
@@ -51,7 +49,7 @@ class MovieData
 		end
 	end
 
-	#loads the movie_viewers hash which points from a movie to all users that have viewed that movie
+	# Loads the movie_viewers hash which points from a movie to all users that have viewed that movie
 	def load_movie_viewers
 		if @movie_viewers.has_key?(@@line_array[1].to_i)
 			@movie_viewers[@@line_array[1].to_i].push(@@line_array[0].to_i)
@@ -60,7 +58,7 @@ class MovieData
 		end
 	end
 
-	#loads the movie_ratings hash which points from a movie to all of its ratings
+	# Loads the movie_ratings hash which points from a movie to all of its ratings
 	def load_movie_ratings
 		if @movie_ratings.has_key?(@@line_array[1].to_i)
 			@movie_ratings[@@line_array[1].to_i].push(@@line_array[2].to_i)
@@ -69,7 +67,7 @@ class MovieData
 		end
 	end
 
-	#loads the test set.  My test data is in an array of arrays.  Each inner array is structure with [user, movie, rating]
+	# Loads the test set.  My test data is in an array of arrays.  Each inner array is structure with [user, movie, rating]
 	def load_test(data_set)
 		File.open(data_set, "r") do |f|
 			f.each_line do |line|
@@ -89,9 +87,11 @@ class MovieData
 	end
 
 	# z.predict(u,m) returns a floating point number between 1.0 and 5.0 as an estimate of what user u would rate movie m
-	# I know there are better prediciton algorithms, but I think this will suffice for this assignment.  It finds the average rating for a
-	# particular movie and sets the prediction to that.
+	# I know there are better prediciton algorithms, like k-means, but I didn't have time to look thoroughly into it and I 
+	# think this will suffice for this assignment.  It finds the average rating for a particular movie and sets the prediction to that.
 	def predict(user, movie)
+		print "BEFORE CALLING:  "
+		puts Time.now
 		return average_of_ratings(@movie_ratings[movie])
 	end
 
@@ -124,6 +124,8 @@ class MovieData
 			end
 			for i in 0..upper_bound
 				predicted_rating = predict(@test_set[i][0], @test_set[i][1])
+				print "AFTER CALLING:  "
+				puts Time.now
 				@predictions.push([@test_set[i][0], @test_set[i][1], @test_set[i][2], predicted_rating])
 				error_set.push((@test_set[i][2] - predicted_rating).abs)
 			end
