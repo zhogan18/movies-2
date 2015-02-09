@@ -1,19 +1,20 @@
-# The MovieTest object also has several instance methods:
+# Zachary Hogan
+# 2/9/2015
+# This is my MovieTest class.  I changed it around a little from the instructions but I think it works well.  I turned it into something that doesn't 
+# really care what is passed into it as long it is an array of numbers.  Technically, this is not even a class for the movie_data, but rather any data.
 class MovieTest
 
-# t.mean returns the average predication error (which should be close to zero)
-# t.stddev returns the standard deviation of the error
-# t.rms returns the root mean square error of the prediction
-# t.to_a returns an array of the predictions in the form [u,m,r,p]. You can also generate other types of error measures if you want, but we will rely mostly on the root mean square error.
 	def initialize(error)
 		@error_values = error
 	end
 
+	# t.mean returns the average predication error (which should be close to zero)
 	def mean
 		sum = @error_values.reduce(:+)
 		avg = sum.to_f / @error_values.length
 	end
 
+	# t.stddev returns the standard deviation of the error
 	def stddev
 		variance = self.variance()
 		standard_deviation = Math.sqrt(variance)	
@@ -30,6 +31,7 @@ class MovieTest
 		variance = variance / (@error_values.length - 1)
 	end
 
+	# t.rms returns the root mean square error of the prediction
 	def rms
 		squared_values = @error_values.map { |value| value**2 } 
 		rms = Math.sqrt(squared_values.reduce(:+) / squared_values.length)
